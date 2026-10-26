@@ -42,8 +42,8 @@ static const char *const s_zh_tw[UI_STR_COUNT] = {
 
 static const char *const s_en[UI_STR_COUNT] = {
     [UI_STR_NEW_MSG] = "New message",
-    [UI_STR_TOUCH_HEAD] = "Touch the head",
-    [UI_STR_TOUCH_CLOSE] = "Touch to close",
+    [UI_STR_TOUCH_HEAD] = "Pat the head",
+    [UI_STR_TOUCH_CLOSE] = "Tap to close",
     [UI_STR_PEER_HERE] = "Peer is here",
     [UI_STR_PEER_AWAY] = "Peer away",
     [UI_STR_PEER_OFFLINE] = "Peer offline",
