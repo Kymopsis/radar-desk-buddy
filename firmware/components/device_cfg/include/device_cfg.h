@@ -2,7 +2,7 @@
 
 /**
  * NVS-backed device / cloud provisioning config.
- * Aligns with INTERFACE.md claim response + SoftAP Wi-Fi form.
+ * Filled by the SoftAP portal and, for Level 3, the server claim response.
  */
 
 #include <stdbool.h>

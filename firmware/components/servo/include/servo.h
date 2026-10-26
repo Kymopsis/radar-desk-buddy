@@ -2,7 +2,7 @@
 
 /**
  * Dual SG90: pan (GPIO5, ±90°) + lift (GPIO7, 0–100%).
- * Soft-home on init; idle can detach PWM (SCHEME: 静止断 PWM).
+ * Soft-home on init; idle can detach PWM (no holding pulse at rest).
  */
 
 #include <stdbool.h>

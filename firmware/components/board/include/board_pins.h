@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * GPIO map — locked to physical silkscreen (agents/INTERFACE.md).
+ * GPIO map — matches docs/wiring.md.
  * Do NOT remap. GPIO35/36/37 are Octal-PSRAM on N16R8 — unusable.
  */
 
@@ -23,7 +23,7 @@
 /* Most GC9A01 round modules: BLK active-high. Override if silk says otherwise. */
 #define BOARD_LCD_BLK_ON_LEVEL  1
 
-/* Servo — both fixed in base (INTERFACE.md) */
+/* Servos — both mounted in the base */
 #define BOARD_PIN_SERVO_PAN  GPIO_NUM_5  /* horizontal follow, 60G only */
 #define BOARD_PIN_SERVO_LIFT GPIO_NUM_7  /* rise / hide, all SKUs */
 

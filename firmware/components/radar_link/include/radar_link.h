@@ -5,7 +5,7 @@
  * TYPE 0x0A04 = tracked targets (preferred); 0x0A08 = point cloud (optional).
  * Payload stride auto: 16 B Andar 2D, 20 B HLK stock, 24 B Andar 3D.
  *
- * Module frame (HLK 方向标识): +X left, +Y forward, +Z up;
+ * Module frame (as marked on the module): +X left, +Y forward, +Z up;
  * azimuth_deg = atan2(x, y).
  */
 

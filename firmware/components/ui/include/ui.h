@@ -34,7 +34,7 @@ typedef enum {
     UI_PEER_PRESENT,
 } ui_peer_status_t;
 
-/** Distance band Z — SCREEN.md (hysteresis applied in ui_feed_radar). */
+/** Distance band (hysteresis applied in ui_feed_radar). */
 typedef enum {
     UI_ZONE_VOID = 0,
     UI_ZONE_FAR,
@@ -42,7 +42,7 @@ typedef enum {
 } ui_zone_t;
 
 /**
- * Face F — SCREEN.md priority (PROV > MSG > SLEEP > EYES > GREET > INFO).
+ * Face priority (PROV > MSG > SLEEP > EYES > GREET > INFO).
  * Names match the contract; old SILENT/HOME removed.
  */
 typedef enum {
@@ -85,7 +85,7 @@ esp_err_t ui_set_cloud_linked(bool linked);
 
 /**
  * SoftAP / local follow arm. Mechanical follow does not hide PROV while the
- * server is down (SCREEN: 无服务器时靠近仍扫码).
+ * device is offline (coming close still shows the setup QR).
  */
 esp_err_t ui_set_follow_active(bool on);
 
@@ -112,7 +112,7 @@ esp_err_t ui_set_pan_deg(float pan_deg);
 esp_err_t ui_set_gaze_az(float az_deg, bool valid);
 
 /**
- * Feed radar sample → update zone hysteresis (SCREEN.md).
+ * Feed radar sample → update zone hysteresis.
  * @param present     fused presence (OUT / UART)
  * @param distance_m  metres when distance_ok
  * @param distance_ok true if UART target range is fresh; false → present maps to NEAR (no FAR/EYES)
@@ -145,7 +145,7 @@ void ui_set_msg_closed_cb(ui_msg_closed_cb_t cb);
 
 /**
  * Keep panel awake (SoftAP client connected / HTTP activity).
- * Presence also wakes; VOID SLEEP dims then offs per SCREEN.md.
+ * Presence also wakes; VOID SLEEP dims, then turns the backlight off.
  */
 void ui_set_keep_awake(bool on);
 void ui_poke_wake(uint32_t duration_ms);

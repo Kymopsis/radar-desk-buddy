@@ -374,16 +374,16 @@ static weather_kind_t weather_kind(void)
         return WX_NONE;
     }
     const char *w = s_model.weather;
-    if (!strcmp(w, "sunny") || !strcmp(w, "晴")) {
+    if (!strcmp(w, "sunny")) {
         return WX_SUNNY;
     }
-    if (!strcmp(w, "cloudy") || !strcmp(w, "阴") || !strcmp(w, "多云")) {
+    if (!strcmp(w, "cloudy")) {
         return WX_CLOUDY;
     }
-    if (!strcmp(w, "rain") || !strcmp(w, "雨")) {
+    if (!strcmp(w, "rain")) {
         return WX_RAIN;
     }
-    if (!strcmp(w, "snow") || !strcmp(w, "雪")) {
+    if (!strcmp(w, "snow")) {
         return WX_SNOW;
     }
     return WX_NONE;
@@ -809,7 +809,7 @@ static uint16_t peer_dot(void)
     }
 }
 
-/* Pairing is optional: never draw 对端离线/在呀. MQTT up is enough to wait for cloud. */
+/* Pairing is optional: never draw the peer status. Being online is enough. */
 static void draw_status_chip(int y)
 {
     if (!s_model.cloud_linked) {
@@ -1184,11 +1184,11 @@ static ui_zone_t effective_zone(int64_t now_ms)
 
 /**
  * Face priority:
- *   !radar → NO_RADAR（唯一常亮告警）
- *   VOID → SLEEP（无人关闭）
- *   FAR + follow ON → EYES（远程跟随；未连服务器也一样）
+ *   !radar → NO_RADAR (the only always-on warning)
+ *   VOID → SLEEP (nobody around: screen off)
+ *   FAR + follow ON → EYES (follow from afar, online or not)
  *   FAR + follow OFF → SLEEP
- *   NEAR → 内容：无云 PROV/QR；未读 GREET；否则 INFO；展信 MSG
+ *   NEAR → content: offline PROV/QR; unread GREET; otherwise INFO; open message MSG
  */
 static bool radar_ok(int64_t now_ms)
 {
@@ -1483,7 +1483,7 @@ esp_err_t ui_init(void)
     s_next_blink_ms = s_boot_ms + 1800;
     s_blink_phase = 0;
     pick_and_render(s_boot_ms);
-    ESP_LOGI(TAG, "SCREEN.md UI ready lang=%s", ui_lang_name(s_model.lang));
+    ESP_LOGI(TAG, "UI ready lang=%s", ui_lang_name(s_model.lang));
     return ESP_OK;
 }
 
@@ -2024,7 +2024,7 @@ bool ui_on_touch(int64_t now_ms)
     if (s_screen == UI_SCREEN_MSG) {
         close_msg();
         pick_and_render(now_ms);
-        return false; /* 关信不是「她摸了一下」 */
+        return false; /* closing a message is not a "pat" event */
     }
     if (s_screen == UI_SCREEN_SLEEP) {
         s_force_near_until_ms = now_ms + FORCE_NEAR_MS;

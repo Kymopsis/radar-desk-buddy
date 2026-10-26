@@ -33,7 +33,7 @@ typedef struct {
 } radar_wire_blip_t;
 
 /*
- * Module frame (HLK-LD6004 方向标识 / Andar 3D host tools):
+ * Module frame (as marked on the module / vendor 3D host tools):
  *   +X = left along board long axis
  *   +Y = forward (out of antenna face)
  *   +Z = up

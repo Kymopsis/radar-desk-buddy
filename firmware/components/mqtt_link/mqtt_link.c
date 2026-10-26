@@ -323,16 +323,16 @@ static const char *weather_label(const char *code)
         return NULL;
     }
     if (!strcmp(code, "sunny")) {
-        return "晴";
+        return "sunny";
     }
     if (!strcmp(code, "cloudy")) {
-        return "阴";
+        return "cloudy";
     }
     if (!strcmp(code, "rain")) {
-        return "雨";
+        return "rain";
     }
     if (!strcmp(code, "snow")) {
-        return "雪";
+        return "snow";
     }
     return NULL;
 }
@@ -464,7 +464,7 @@ static void fetch_media(void)
     if (s_media_bytes > MEDIA_MAX_BYTES) {
         ESP_LOGW(TAG, "media too large %d", s_media_bytes);
         ui_clear_msg_image();
-        ui_set_msg_text("图片太大");
+        ui_set_msg_text("Image too large");
         publish_ack("msg", s_media_id, "failed", "too_large");
         return;
     }
@@ -474,7 +474,7 @@ static void fetch_media(void)
     }
     if (!buf) {
         ui_clear_msg_image();
-        ui_set_msg_text("图片内存不足");
+        ui_set_msg_text("Not enough memory for image");
         publish_ack("msg", s_media_id, "failed", "nomem");
         return;
     }
@@ -497,7 +497,7 @@ static void fetch_media(void)
     if (!client) {
         free(buf);
         ui_clear_msg_image();
-        ui_set_msg_text("图片下载失败");
+        ui_set_msg_text("Image download failed");
         publish_ack("msg", s_media_id, "failed", "http_init");
         return;
     }
@@ -511,7 +511,7 @@ static void fetch_media(void)
                  acc.len);
         free(buf);
         ui_clear_msg_image();
-        ui_set_msg_text("图片下载失败");
+        ui_set_msg_text("Image download failed");
         publish_ack("msg", s_media_id, "failed", "http");
         return;
     }
@@ -522,7 +522,7 @@ static void fetch_media(void)
         ESP_LOGW(TAG, "media sha mismatch");
         free(buf);
         ui_clear_msg_image();
-        ui_set_msg_text("图片校验失败");
+        ui_set_msg_text("Image check failed");
         publish_ack("msg", s_media_id, "failed", "sha256");
         return;
     }
@@ -530,7 +530,7 @@ static void fetch_media(void)
     free(buf);
     if (dec != ESP_OK) {
         ui_clear_msg_image();
-        ui_set_msg_text("图片无法显示");
+        ui_set_msg_text("Cannot show image");
         publish_ack("msg", s_media_id, "failed", "jpeg");
         return;
     }
@@ -559,7 +559,7 @@ static void apply_msg_obj(cJSON *root)
         if (url && url[0] && type && !strcmp(type, "image")) {
             queue_media(url, sha, nbytes, id);
         } else if (!show || !show[0]) {
-            ui_set_msg_text(!strcmp(type, "anim") ? "收到动图" : "收到短片");
+            ui_set_msg_text(!strcmp(type, "anim") ? "Animation received" : "Video received");
         }
         return;
     }

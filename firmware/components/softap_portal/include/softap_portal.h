@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-/** Portal hostname served by SoftAP DNS (A → AP IPv4). 模组配置入口. */
+/** Portal hostname served by SoftAP DNS (A → AP IPv4): the setup page address. */
 #define SOFTAP_PORTAL_HOST "mod.config"
 
 esp_err_t softap_portal_start(void);

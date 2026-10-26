@@ -40,7 +40,7 @@ static int64_t s_pause_until_ms;
 static int64_t s_last_present_ms;
 static int64_t s_present_since_ms;
 static bool s_seeing;
-static bool s_rise_asap; /* SoftAP「启动跟随」：跳过 ENTER 防抖立刻升起 */
+static bool s_rise_asap; /* Portal "Start follow": skip the ENTER debounce and rise at once */
 static float s_az_filt;
 static bool s_az_filt_init;
 static int64_t s_last_pan_ms;
@@ -246,7 +246,7 @@ static void motion_task(void *arg)
             continue;
         }
 
-        /* 「启动跟随」: rise as soon as present (skip ENTER). */
+        /* "Start follow": rise as soon as present (skip ENTER). */
         if (s_phase == MOTION_HIDDEN && present && (confirmed || s_rise_asap)) {
             do_rise();
         }
@@ -316,7 +316,7 @@ void motion_notify_manual(void)
     /*
      * SoftAP owns the pose while follow is off. Keep phase HIDDEN even if lift
      * is at 100% — otherwise follow-off path sees TRACKING and runs do_hide
-     * (slow home), which is the "升到上位又自己回零" bug.
+     * (slow home), which is the "rises, then drops back home by itself" bug.
      */
     if (!s_follow_enabled) {
         s_phase = MOTION_HIDDEN;

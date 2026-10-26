@@ -40,7 +40,7 @@ directly to Open-Meteo (weather) and Telegram.
 
 | Part | Notes | Buy |
 |---|---|---|
-| 60 GHz AiP radar development kit | Choose the **Presence, wall mount** firmware (3D presence with target positions over UART). Comes with a lead to female Dupont plugs | [Kymopsis](https://kymopsis.com/product/60ghz-aip-gesture-radar-development-kit/?utm_source=github&utm_medium=readme&utm_campaign=radar-desk-buddy) |
+| 60 GHz AiP radar development kit | Choose the **Presence, wall mount** firmware (3D presence with target positions over UART). Comes with a lead to female Dupont plugs | [Kymopsis](https://kymopsis.com/product/60ghz-aip-gesture-radar-development-kit/?attribute_pre-flashed-firmware=Presence%2C+wall+mount&utm_source=github&utm_medium=readme&utm_campaign=radar-desk-buddy) |
 | ESP32-S3 board, N16R8, dual USB-C | 16 MB flash + 8 MB PSRAM is required | [Kymopsis](https://kymopsis.com/product/esp32-s3-n16r8-development-board/?utm_source=github&utm_medium=readme&utm_campaign=radar-desk-buddy) |
 | 1.28" round TFT, GC9A01, 240×240 | SPI | [Kymopsis](https://kymopsis.com/product/1-28-inch-round-tft-display-gc9a01-240x240/?utm_source=github&utm_medium=readme&utm_campaign=radar-desk-buddy) |
 | 2 × micro servo (SG90 or MG90S) | Pan + lift | [SG90](https://kymopsis.com/product/sg90-micro-servo-9g/?utm_source=github&utm_medium=readme&utm_campaign=radar-desk-buddy) · [MG90S](https://kymopsis.com/product/mg90s-metal-gear-micro-servo-9g/?utm_source=github&utm_medium=readme&utm_campaign=radar-desk-buddy) |
