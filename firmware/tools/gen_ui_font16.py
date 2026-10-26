@@ -22,6 +22,8 @@ CANDIDATES = [
 STRINGS = [
     # digits / punct
     "0123456789:./- ℃°%+ ",
+    # full printable ASCII: Wi-Fi names, passwords and Telegram text can use any of it
+    "".join(chr(c) for c in range(0x20, 0x7F)),
     # zh
     "有新留言向上摸摸头再摸一下关掉对端在呀不离线给TA发消息云端也能玩配网扫码连接选语言填绑定码留言今天也想你雨晴阴想你啦语言性别男版蓝色女版粉色雷达未连接服务器未连接",
     # zh-tw extras
