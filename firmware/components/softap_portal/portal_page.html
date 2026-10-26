@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Desk Buddy Setup</title>
+<style>
+:root{--bg:#fbf0f4;--card:#fff;--ink:#1c1c1c;--muted:#666;--line:#e6e0e4;--accent:#c45b86;--accent2:#b85c38;--ok:#1f8a5b;--bad:#b33a3a;--warn:#c4872a}
+body.theme-f{--bg:#fbf0f4;--accent:#c45b86}
+body.theme-m{--bg:#eef4fb;--accent:#3a7ebd}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;margin:0;background:var(--bg);color:var(--ink);transition:background .2s}
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:1.35rem;margin:0 0 6px}h2{font-size:1.05rem;margin:0 0 8px}
+h3{font-size:1rem;margin:18px 0 8px}
+p{line-height:1.45}.muted{color:var(--muted);font-size:.92rem}
+.card{background:var(--card);border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+button{padding:12px 14px;font-size:1rem;border-radius:10px;border:1px solid #bbb;background:#fff;cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.warn{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+button.danger{background:#8b2e2e;color:#fff;border-color:#8b2e2e}
+button:disabled{opacity:.45}
+label{display:block;margin:8px 0 4px;font-weight:600}
+input,select{width:100%;padding:12px;font-size:1rem;border:1px solid var(--line);border-radius:10px;background:#fff}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.9rem;background:#e8e0d4;font-weight:600}
+.badge.on{background:#c8eadf;color:#146047}.badge.off{background:#f0d6d0;color:#8a3030}
+.badge.wait{background:#ffe9c8;color:#8a5a10}.badge.ok{background:#c8eadf;color:#146047}.badge.bad{background:#f5d0d0;color:#8a3030}
+.swatch{display:flex;gap:10px}
+.swatch .opt{flex:1;border:2px solid var(--line);border-radius:12px;padding:14px;text-align:center;font-weight:600;cursor:pointer;user-select:none}
+.swatch .opt.f{background:linear-gradient(160deg,#ffe4ef,#fff)}
+.swatch .opt.m{background:linear-gradient(160deg,#dcecff,#fff)}
+.swatch .opt.on{border-color:var(--accent);box-shadow:0 0 0 3px rgba(196,91,134,.35)}
+body.theme-m .swatch .opt.on{box-shadow:0 0 0 3px rgba(58,126,189,.35)}
+.hidden{display:none!important}
+#wifiBanner,#cloudBanner,.banner{margin-top:12px;padding:12px 14px;border-radius:12px;font-weight:600;display:none}
+#wifiBanner.show,#cloudBanner.show,.banner.show{display:block}
+#wifiBanner.wait,#cloudBanner.wait,.banner.wait{background:#fff4df;color:#8a5a10}
+#wifiBanner.ok,#cloudBanner.ok,.banner.ok{background:#e5f7ee;color:#146047}
+#wifiBanner.bad,#cloudBanner.bad,.banner.bad{background:#fdeeee;color:#8a3030}
+.stat-grid{display:grid;gap:10px}
+.stat{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fcfafb}
+.stat .ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:#f3eef1;flex-shrink:0}
+.stat .meta{flex:1;min-width:0}
+.stat .k{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.stat .v{font-size:1rem;font-weight:650;margin-top:2px;word-break:break-word}
+.bars{display:inline-flex;gap:2px;align-items:flex-end;height:14px;margin-left:6px;vertical-align:middle}
+.bars i{display:block;width:4px;background:#ccc;border-radius:1px}
+.bars i.on{background:var(--ok)}
+.tune-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+#tuneBanner{margin-top:12px;padding:12px 14px;border-radius:12px;font-weight:600;display:none}
+#tuneBanner.show{display:block}
+#tuneBanner.wait{background:#fff4df;color:#8a5a10}
+#tuneBanner.ok{background:#e5f7ee;color:#146047}
+#tuneBanner.bad{background:#fdeeee;color:#8a3030}
+</style>
+</head>
+<body class="theme-f">
+<div class="wrap">
+<section id="welcome">
+<div class="card">
+<h1 id="wTitle">Desk Buddy</h1>
+<p class="muted" id="wLead">Choose language and color — updates the screen live.</p>
+<label id="lblLang" for="langSel">Language</label>
+<select id="langSel">
+<option value="en" selected>English</option>
+<option value="zh-CN">简体中文</option>
+<option value="zh-TW">繁體中文</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="de">Deutsch</option>
+<option value="pt">Português</option>
+<option value="ru">Русский</option>
+</select>
+<label id="lblTheme" style="margin-top:14px">Color theme</label>
+<div class="swatch">
+<div class="opt f on" id="optF" data-gender="female">Pink</div>
+<div class="opt m" id="optM" data-gender="male">Blue</div>
+</div>
+<label id="lblFlip" style="margin-top:14px">Screen orientation</label>
+<div class="swatch">
+<div class="opt on" id="optFlip0" data-flip="0">Normal</div>
+<div class="opt" id="optFlip1" data-flip="1">Flip 180°</div>
+</div>
+<p id="syncOk"></p>
+<div class="row"><button type="button" class="primary" id="btnEnter" style="width:100%">Continue</button></div>
+</div>
+</section>
+
+<section id="main" class="hidden">
+<h1 id="mTitle">Desk Buddy Setup</h1>
+<p class="muted" id="mLead"></p>
+<p><button type="button" id="btnPrefs">Language / theme</button></p>
+
+<div class="card">
+<h2 id="hWifi">1. Wi-Fi</h2>
+<p class="muted" id="pWifiHint">Select a network, enter password, then Connect Wi-Fi.</p>
+<label id="lblSsid" for="ssidList">Network</label>
+<div class="row">
+<select id="ssidList" style="flex:1"><option value="">Scanning…</option></select>
+<button type="button" id="btnScan">Scan</button>
+</div>
+<label id="lblManual" for="ssidManual">Or type SSID</label>
+<input id="ssidManual" placeholder="Optional manual SSID">
+<label id="lblPass" for="wifiPass">Password</label>
+<input id="wifiPass" type="password" autocomplete="current-password">
+<div class="row"><button type="button" class="primary" id="btnWifi" style="width:100%">Connect Wi-Fi</button></div>
+<div id="wifiBanner"></div>
+
+</div>
+
+<div class="card">
+<h2 id="hPlace">Time, weather &amp; Telegram</h2>
+<p class="muted" id="pPlaceHint">Type your city (name only, e.g. Berlin). Time zone and weather follow from it.</p>
+<label id="lblCity" for="cityIn">City</label>
+<input id="cityIn" placeholder="Berlin" autocomplete="off" maxlength="48">
+<div class="row"><button type="button" class="primary" id="btnCity" style="width:100%">Save city</button></div>
+<div id="placeBanner" class="banner"></div>
+<h3 id="hTg">Telegram (optional)</h3>
+<p class="muted" id="pTgHint">Create a bot with @BotFather, paste its token here, then open the bot and press Start. Messages you send it appear on the screen.</p>
+<label id="lblTg" for="tgToken">Bot token</label>
+<input id="tgToken" type="password" placeholder="123456789:AA..." autocomplete="off" maxlength="64">
+<div class="row">
+<button type="button" class="primary" id="btnTg" style="flex:1">Save token</button>
+<button type="button" id="btnTgUnpair">Unpair chat</button>
+</div>
+<div id="tgBanner" class="banner"></div>
+</div>
+<div class="card">
+<h2 id="hFollow">2. Radar</h2>
+<p id="pFollowState"><span id="fbadge" class="badge off">Off</span></p>
+<canvas id="radarFan" width="320" height="200" style="width:100%;max-width:360px;height:auto;display:block;margin:8px auto;background:#1a1f2a;border-radius:12px"></canvas>
+<p class="muted" id="radarHint" style="text-align:center;margin:4px 0 2px"></p>
+<p class="muted" id="radarRule" style="text-align:center;margin:0 0 8px;font-size:.85rem"></p>
+<div class="row">
+<button type="button" id="btnOn" class="primary">Start follow</button>
+<button type="button" id="btnOff" class="danger">Stop follow</button>
+</div>
+<p class="muted" id="pFollowHint"></p>
+</div>
+
+<div class="card">
+<h2 id="hTune">3. Distance</h2>
+<p class="muted" id="pTuneHint">Near lights the info face. Far keeps eyes + toy. Nobody → hide.</p>
+<p class="muted" id="pTuneLive"></p>
+<div class="tune-grid">
+<div><label id="lblNear" for="nearM">Near enter (m)</label><input id="nearM" type="number" step="0.05" min="0.2" max="2.5"></div>
+<div><label id="lblNearExit" for="nearExitM">Near exit (m)</label><input id="nearExitM" type="number" step="0.05" min="0.25" max="3"></div>
+<div><label id="lblFar" for="farM">Far max (m)</label><input id="farM" type="number" step="0.1" min="1.5" max="8"></div>
+<div><label id="lblHide" for="hideS">Hide after (s)</label><input id="hideS" type="number" step="1" min="3" max="30"></div>
+<div><label id="lblRise" for="riseMs">Rise delay (ms)</label><input id="riseMs" type="number" step="50" min="100" max="2000"></div>
+<div><label id="lblPanDps" for="panDps">Pan speed (°/s)</label><input id="panDps" type="number" step="5" min="20" max="180"></div>
+<div><label id="lblPanMax" for="panMax">Pan limit (±°)</label><input id="panMax" type="number" step="5" min="30" max="90"></div>
+</div>
+<div class="row"><button type="button" class="primary" id="btnTune" style="width:100%">Save distance</button></div>
+<div class="row"><button type="button" id="btnDefaults" style="width:100%">Restore defaults</button></div>
+<div id="tuneBanner"></div>
+</div>
+
+<div class="card">
+<h2 id="hStatus">4. Live status</h2>
+<div class="stat-grid" id="statGrid">
+<div class="stat"><div class="ico">📡</div><div class="meta"><div class="k" id="kFollow">Follow</div><div class="v" id="vFollow">—</div></div></div>
+<div class="stat"><div class="ico">👤</div><div class="meta"><div class="k" id="kPresent">Presence</div><div class="v" id="vPresent">—</div></div></div>
+<div class="stat"><div class="ico">📐</div><div class="meta"><div class="k" id="kZone">Zone</div><div class="v" id="vZone">—</div></div></div>
+<div class="stat"><div class="ico">📶</div><div class="meta"><div class="k" id="kHomeWifi">Home Wi-Fi</div><div class="v" id="vHomeWifi">—</div></div></div>
+<div class="stat"><div class="ico">🎀</div><div class="meta"><div class="k" id="kTheme">Theme</div><div class="v" id="vTheme">—</div></div></div>
+<div class="stat"><div class="ico">⛅</div><div class="meta"><div class="k" id="kPlace">City</div><div class="v" id="vPlace">—</div></div></div>
+<div class="stat"><div class="ico">✈</div><div class="meta"><div class="k" id="kTg">Telegram</div><div class="v" id="vTg">—</div></div></div>
+<div class="stat"><div class="ico">☁</div><div class="meta"><div class="k" id="kCloud">Own server</div><div class="v" id="vCloud">—</div></div></div>
+</div>
+</div>
+
+<div class="card">
+<h2 id="hCal">5. Servo calibration</h2>
+<p class="muted" id="pCalHint">Optional. Jogging exits follow mode.</p>
+<h2 style="margin-top:8px;font-size:1rem">Pan</h2>
+<div class="row">
+<button type="button" data-j="/servo?pan=-10">-10°</button>
+<button type="button" data-j="/servo?pan=-1">-1°</button>
+<button type="button" class="primary" data-j="/servo?pan_set=0">0°</button>
+<button type="button" data-j="/servo?pan=1">+1°</button>
+<button type="button" data-j="/servo?pan=10">+10°</button>
+</div>
+<h2 style="font-size:1rem">Lift</h2>
+<div class="row">
+<button type="button" data-j="/servo?lift_set=0">0%</button>
+<button type="button" data-j="/servo?lift=-5">-5%</button>
+<button type="button" data-j="/servo?lift=5">+5%</button>
+<button type="button" data-j="/servo?lift_set=100">100%</button>
+</div>
+<div class="row">
+<button type="button" class="warn" id="btnHome" data-j="/servo?home=1">Safe home</button>
+<button type="button" id="btnFlip" data-j="/servo?flip_pan=1">Flip pan</button>
+</div>
+</div>
+<details class="card">
+<summary id="hCloudCard" style="font-weight:650;cursor:pointer">Advanced: your own server (Level 3)</summary>
+
+<p class="muted" id="pCloudHint">Pair code and cloud URL. Does not rejoin Wi-Fi.</p>
+<label id="lblBind" for="bindCode">Pair code</label>
+<input id="bindCode" placeholder="my-pair-code" autocomplete="off" maxlength="32">
+<label id="lblCloud" for="claimBase">Cloud URL</label>
+<input id="claimBase" placeholder="https://buddy.example.com" autocomplete="off" maxlength="96">
+<div class="row"><button type="button" class="primary" id="btnCloud" style="width:100%">Connect server</button></div>
+<div id="cloudBanner"></div>
+</details>
+</section>
+</div>
+<script>
+(function(){
+var T={
+en:{title:"Desk Buddy",lead:"Choose language and color — updates the screen live.",
+lang:"Language",theme:"Color theme",pink:"Pink",blue:"Blue",go:"Continue",synced:"Synced to screen",
+mTitle:"Desk Buddy Setup",mLead:"Wi-Fi first, then your city, then radar and the rest.",
+prefs:"Language / theme",hFollow:"2. Radar",fOn:"On",fOff:"Off",
+start:"Start follow",stop:"Stop follow",
+fHint:"On at boot: screen eyes and toy track together. Stop follow here until the next power cycle — it is not remembered.",
+radarEmpty:"No target yet — face the radar forward.",
+radarLive:"Green = nearest (pan follows) · blue = others",
+radarRule:"Track nearest in-range target; pan limit from Distance. Scale rings to 6 m.",
+hTune:"3. Distance",pTuneHint:"Near shows time + weather (setup QR while offline). Far keeps eyes + toy. Nobody → hide.",
+lblNear:"Near enter (m)",lblNearExit:"Near exit (m)",lblFar:"Far max (m)",
+lblHide:"Hide after (s)",lblRise:"Rise delay (ms)",lblPanDps:"Pan speed (°/s)",lblPanMax:"Pan limit (±°)",
+saveTune:"Save distance",resetTune:"Restore defaults",tuneOk:"Saved — live now",tuneFail:"Could not save",
+resetOk:"Restored factory distance + follow ON",resetFail:"Could not restore",
+zoneVoid:"Empty (hidden)",zoneFar:"Far (eyes)",zoneNear:"Near (content)",kZone:"Zone",
+hWifi:"1. Wi-Fi",wHint:"Pick a network, enter password, then Connect Wi-Fi.",
+net:"Network",scan:"Scan",manual:"Or type SSID",pass:"Password",bind:"Pair code",cloud:"Cloud URL",
+conn:"Connect Wi-Fi",connCloud:"Connect server",
+hCloudCard:"Server",cCloudHint:"Pair code and cloud URL. Connecting the server will not rejoin Wi-Fi.",
+scanning:"Scanning…",scanFail:"Scan failed",connecting:"Connecting to Wi-Fi…",
+connStart:"Saved. Connecting Wi-Fi… SoftAP stays up.",
+connOk:"Connected",connFail:"Could not join Wi-Fi. Check password and try again.",
+needSsid:"Select or type a Wi-Fi name",
+cloudStart:"Saved. Connecting to the server…",
+cloudOk:"Server connected",cloudFail:"Could not reach the server. Check pair code and URL.",
+cloudWaitIp:"Waiting for home Wi-Fi…",cloudSntp:"Syncing time…",
+cloudClaim:"Claiming device…",cloudMqtt:"Connecting MQTT…",
+cloudNeedWifi:"Connect home Wi-Fi first.",
+needBind:"Enter a pair code",
+flip:"Screen orientation",flip0:"Normal",flip1:"Flip 180°",
+wifiDown:"Not connected",wifiWait:"Connecting…",
+presentYes:"Someone nearby",presentNo:"No one nearby",
+kFollow:"Radar follow",kPresent:"Presence",kHomeWifi:"Home Wi-Fi",kTheme:"Theme",kCloud:"Cloud",
+hStatus:"4. Live status",hCal:"5. Servo calibration",cHint:"Optional. Jogging exits follow.",
+home:"Safe home",flipPan:"Flip pan",
+hPlace:"Time, weather & Telegram",pPlaceHint:"Type your city (name only, e.g. Berlin). Time zone and weather follow from it.",
+lblCity:"City",btnCity:"Save city",cityStart:"Saved. Looking up the city…",cityOk:"Weather for",cityNotFound:"City not found. Try the English name, without country.",
+cityNeedWifi:"Saved. It is looked up once home Wi-Fi is connected.",kPlace:"City",
+hTg:"Telegram (optional)",pTgHint:"Create a bot with @BotFather, paste its token here, then open the bot and press Start. Messages you send it appear on the screen.",
+lblTg:"Bot token",btnTg:"Save token",btnTgUnpair:"Unpair chat",kTg:"Telegram",
+tgOff:"Off",tgWaitWifi:"Waiting for Wi-Fi…",tgWaitPair:"Open the bot and press Start:",tgPaired:"Paired",tgBad:"Token rejected. Copy it again from @BotFather.",tgErr:"Cannot reach Telegram right now.",
+needUrl:"Enter your server URL (http:// or https://)",hCloudCard:"Advanced: your own server (Level 3)",kCloud:"Own server",
+cCloudHint:"Only for the self-hosted server in the server/ folder. Leave empty for Levels 1 and 2."},
+"zh-CN":{title:"Desk Buddy",lead:"选择语言和配色会立刻反映在设备屏幕上。",
+lang:"语言",theme:"配色",pink:"粉色",blue:"蓝色",go:"进入设置",synced:"已同步到屏幕",
+mTitle:"Desk Buddy 设置",mLead:"先配 Wi-Fi 和城市，再看雷达，然后是其他设置。",
+prefs:"语言 / 配色",hFollow:"2. 雷达",fOn:"开启",fOff:"关闭",
+start:"启动跟随",stop:"停止跟随",
+fHint:"上电默认开：屏幕眼睛和玩具一起跟随。点「停止跟随」只对这一次上电有效，断电后再开仍会跟随。",
+radarEmpty:"暂无目标 — 请正对雷达前方。",
+radarLive:"绿=最近（舵机跟随）· 蓝=其他目标",
+radarRule:"跟随扇形内最近目标；转角上限见距离设置。刻度环到 6 m。",
+hTune:"3. 距离",pTuneHint:"近场亮起内容（没联网则显示二维码，联网后显示时间天气）。远场眼睛+玩具跟随。无人则藏起。",
+lblNear:"近场进入 (m)",lblNearExit:"近场退出 (m)",lblFar:"远场上限 (m)",
+lblHide:"无人藏起 (秒)",lblRise:"升起确认 (ms)",lblPanDps:"转向速度 (°/s)",lblPanMax:"转向软限 (±°)",
+saveTune:"保存距离",resetTune:"恢复默认",tuneOk:"已保存，立即生效",tuneFail:"保存失败",
+resetOk:"已恢复出厂距离，并重新开启跟随",resetFail:"恢复失败",
+zoneVoid:"无人（关闭）",zoneFar:"远场（眼睛）",zoneNear:"近场（内容）",kZone:"距离带",
+hWifi:"1. Wi-Fi",wHint:"选择网络、填密码后连接 Wi-Fi。",
+net:"网络",scan:"扫描",manual:"或手输名称",pass:"密码",bind:"绑定码",cloud:"云地址",
+conn:"连接 Wi-Fi",connCloud:"连接服务器",
+hCloudCard:"服务器",cCloudHint:"填绑定码和云地址后连接服务器。不会重新连接 Wi-Fi。",
+scanning:"扫描中…",scanFail:"扫描失败",connecting:"正在连接 Wi-Fi…",
+connStart:"已保存，正在连接 Wi-Fi… 配网热点仍可用。",
+connOk:"已连接",connFail:"连接失败，请检查密码后重试。",
+needSsid:"请选择或输入 Wi-Fi 名称",
+cloudStart:"已保存绑定，正在连接服务器…",
+cloudOk:"服务器已连接",cloudFail:"服务器连接失败，请检查绑定码和云地址。",
+cloudWaitIp:"等待家里 Wi-Fi…",cloudSntp:"正在对时…",
+cloudClaim:"正在登记设备…",cloudMqtt:"正在连接 MQTT…",
+cloudNeedWifi:"请先连接家里 Wi-Fi。",
+needBind:"请填写绑定码",
+flip:"屏幕方向",flip0:"正向",flip1:"翻转 180°",
+wifiDown:"未连接",wifiWait:"连接中…",
+presentYes:"附近有人",presentNo:"附近无人",
+kFollow:"雷达跟随",kPresent:"人体感应",kHomeWifi:"家里 Wi-Fi",kTheme:"配色",kCloud:"云",
+hStatus:"4. 实时状态",hCal:"5. 舵机标定",cHint:"可选。点动会退出跟随。",
+home:"安全回中",flipPan:"翻转方向",
+hPlace:"时间、天气和 Telegram",pPlaceHint:"输入城市名（只写城市，例如 Shenzhen 或 深圳），时区和天气按城市自动获取。",
+lblCity:"城市",btnCity:"保存城市",cityStart:"已保存，正在查找城市…",cityOk:"天气地点：",cityNotFound:"找不到这个城市，请试试英文名，不要带国家。",
+cityNeedWifi:"已保存，连上家里 Wi-Fi 后自动查找。",kPlace:"城市",
+hTg:"Telegram（可选）",pTgHint:"在 @BotFather 创建机器人，把 token 粘贴到这里，然后打开机器人点 Start。发给它的文字会显示在屏幕上。",
+lblTg:"机器人 token",btnTg:"保存 token",btnTgUnpair:"解除绑定",kTg:"Telegram",
+tgOff:"未开启",tgWaitWifi:"等待 Wi-Fi…",tgWaitPair:"打开机器人点 Start：",tgPaired:"已绑定",tgBad:"token 无效，请从 @BotFather 重新复制。",tgErr:"暂时连不上 Telegram。",
+needUrl:"请输入服务器地址（http:// 或 https://）",hCloudCard:"进阶：自建服务器（第 3 级）",kCloud:"自建服务器",
+cCloudHint:"只用于 server/ 目录里的自建服务器。第 1、2 级不用填。"},
+"zh-TW":{title:"Desk Buddy",lead:"選擇語言與配色會立刻反映在裝置螢幕上。",
+lang:"語言",theme:"配色",pink:"粉色",blue:"藍色",go:"進入設定",synced:"已同步到螢幕",
+mTitle:"Desk Buddy 設定",mLead:"先配 Wi-Fi 與城市，再看雷達，然後是其他設定。",
+prefs:"語言 / 配色",hFollow:"2. 雷達",fOn:"開啟",fOff:"關閉",
+start:"啟動跟隨",stop:"停止跟隨",
+fHint:"上電預設開：螢幕眼睛與玩具一起跟隨。點「停止跟隨」只對這次上電有效，斷電後再開仍會跟隨。",
+radarEmpty:"暫無目標 — 請正對雷達前方。",
+radarLive:"綠=最近（跟隨）· 藍=其他",
+radarRule:"跟隨扇形內最近目標；轉角上限見距離設定。刻度到 6 m。",
+hTune:"3. 距離",pTuneHint:"近場亮起內容（沒連網則顯示二維碼，連網後顯示時間天氣）。遠場眼睛+玩具跟隨。無人則藏起。",
+lblNear:"近場進入 (m)",lblNearExit:"近場退出 (m)",lblFar:"遠場上限 (m)",
+lblHide:"無人藏起 (秒)",lblRise:"升起確認 (ms)",lblPanDps:"轉向速度 (°/s)",lblPanMax:"轉向軟限 (±°)",
+saveTune:"儲存距離",resetTune:"恢復預設",tuneOk:"已儲存，立刻生效",tuneFail:"儲存失敗",
+resetOk:"已恢復出廠距離，並重新開啟跟隨",resetFail:"恢復失敗",
+zoneVoid:"無人（關閉）",zoneFar:"遠場（眼睛）",zoneNear:"近場（內容）",kZone:"距離帶",
+hWifi:"1. Wi-Fi",wHint:"選擇網路、填密碼後連接 Wi-Fi。",
+net:"網路",scan:"掃描",manual:"或手輸名稱",pass:"密碼",bind:"綁定碼",cloud:"雲端位址",
+conn:"連接 Wi-Fi",connCloud:"連接伺服器",
+hCloudCard:"伺服器",cCloudHint:"填綁定碼與雲端位址後連接伺服器。不會重新連接 Wi-Fi。",
+scanning:"掃描中…",scanFail:"掃描失敗",connecting:"正在連線…",
+connStart:"已儲存，正在連線 Wi-Fi…",
+connOk:"已連線",connFail:"連線失敗，請檢查密碼。",
+needSsid:"請選擇或輸入名稱",
+cloudStart:"已儲存綁定，正在連接伺服器…",
+cloudOk:"伺服器已連線",cloudFail:"伺服器連線失敗，請檢查綁定碼與位址。",
+cloudWaitIp:"等待家里 Wi-Fi…",cloudSntp:"正在對時…",
+cloudClaim:"正在登記裝置…",cloudMqtt:"正在連接 MQTT…",
+cloudNeedWifi:"請先連接家里 Wi-Fi。",
+needBind:"請填寫綁定碼",
+flip:"螢幕方向",flip0:"正向",flip1:"翻轉 180°",
+wifiDown:"未連線",wifiWait:"連線中…",
+presentYes:"附近有人",presentNo:"附近無人",
+kFollow:"雷達跟隨",kPresent:"人體感應",kHomeWifi:"家里 Wi-Fi",kTheme:"配色",kCloud:"雲",
+hStatus:"4. 即時狀態",hCal:"5. 舵機標定",cHint:"可選。點動會退出跟隨。",
+home:"安全回中",flipPan:"翻轉方向"},
+ja:{title:"Desk Buddy",lead:"言語と色を選ぶと画面にすぐ反映されます。",
+lang:"言語",theme:"テーマ",pink:"ピンク",blue:"ブルー",go:"続行",synced:"画面に同期済み",
+mTitle:"Desk Buddy 設定",mLead:"先に Wi-Fi とサーバー、次にレーダー、その他は後で。",
+prefs:"言語 / テーマ",hFollow:"2. レーダー",fOn:"ON",fOff:"OFF",
+start:"追従開始",stop:"追従停止",fHint:"起動時はON：目とフィギュアが一緒に追従。停止はこの通電中だけ。電源を入れ直すと再び追従します。",
+radarEmpty:"目標なし — 正面を向けてください。",
+radarLive:"緑=最近（追従）· 青=他目標",
+radarRule:"扇形内の最近目標を追従。角度上限は距離設定。目盛は 6 m。",
+hTune:"3. 距離",pTuneHint:"近場で内容（オフライン時はQR）。遠場は目+追従。不在は収納。",
+lblNear:"近場入り (m)",lblNearExit:"近場抜け (m)",lblFar:"遠場上限 (m)",
+lblHide:"収納まで (秒)",lblRise:"上昇確認 (ms)",lblPanDps:"旋回速度 (°/s)",lblPanMax:"旋回上限 (±°)",
+saveTune:"距離を保存",resetTune:"初期値に戻す",tuneOk:"保存して即反映",tuneFail:"保存失敗",
+resetOk:"距離を初期化し、追従をONにしました",resetFail:"復元失敗",
+zoneVoid:"不在（消灯）",zoneFar:"遠場（目）",zoneNear:"近場（内容）",kZone:"ゾーン",
+hWifi:"1. Wi-Fi",wHint:"ネットワークとパスワードを入力して接続。",
+net:"ネットワーク",scan:"スキャン",manual:"SSIDを入力",pass:"パスワード",bind:"ペアコード",cloud:"クラウドURL",
+conn:"Wi-Fi接続",connCloud:"サーバー接続",
+hCloudCard:"サーバー",cCloudHint:"ペアコードとURL。サーバー接続はWi-Fiを繋ぎ直しません。",
+scanning:"スキャン中…",scanFail:"失敗",connecting:"接続中…",
+connStart:"保存してWi-Fi接続中…",connOk:"接続完了",connFail:"接続失敗。パスワードを確認。",
+needSsid:"SSIDを選んでください",
+cloudStart:"保存してサーバー接続中…",
+cloudOk:"サーバー接続完了",cloudFail:"サーバー接続失敗。コードとURLを確認。",
+cloudWaitIp:"自宅Wi-Fi待ち…",cloudSntp:"時刻同期中…",
+cloudClaim:"デバイス登録中…",cloudMqtt:"MQTT接続中…",
+cloudNeedWifi:"先に自宅Wi-Fiへ接続してください。",
+needBind:"ペアコードを入力",
+flip:"画面の向き",flip0:"通常",flip1:"180°反転",
+wifiDown:"未接続",wifiWait:"接続中…",
+presentYes:"近くに人あり",presentNo:"近くに人なし",
+kFollow:"レーダー追従",kPresent:"在席",kHomeWifi:"自宅Wi-Fi",kTheme:"テーマ",kCloud:"クラウド",
+hStatus:"4. 状態",hCal:"5. サーボ調整",cHint:"任意。操作すると追従解除。",
+home:"安全ホーム",flipPan:"向き反転"}
+};
+var gender="female";
+var screenFlip=false;
+var lastSta="idle";
+var prefsHydrated=false;
+var cloudHydrated=false;
+var tuneHydrated=false;
+var scanning=false;
+var wifiBusy=false;
+var cloudBusy=false;
+var scanTimer=null;
+function el(id){return document.getElementById(id);}
+function tr(){var l=el("langSel").value;return T[l]||T.en;}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+function applyTheme(){
+document.body.className=gender==="male"?"theme-m":"theme-f";
+el("optF").className="opt f"+(gender==="female"?" on":"");
+el("optM").className="opt m"+(gender==="male"?" on":"");
+el("optF").textContent=tr().pink;
+el("optM").textContent=tr().blue;
+el("optFlip0").className="opt"+(screenFlip?"":" on");
+el("optFlip1").className="opt"+(screenFlip?" on":"");
+el("optFlip0").textContent=tr().flip0;
+el("optFlip1").textContent=tr().flip1;
+}
+function applyI18n(){
+var t=tr();
+function set(id,v){var e=el(id);if(e)e.textContent=v;}
+set("wTitle",t.title);set("wLead",t.lead);set("lblLang",t.lang);
+set("lblTheme",t.theme);set("lblFlip",t.flip);set("btnEnter",t.go);
+set("mTitle",t.mTitle);set("mLead",t.mLead);set("btnPrefs",t.prefs);
+set("hFollow",t.hFollow);set("btnOn",t.start);set("btnOff",t.stop);set("pFollowHint",t.fHint);
+set("hTune",t.hTune||T.en.hTune);set("pTuneHint",t.pTuneHint||T.en.pTuneHint);
+set("lblNear",t.lblNear||T.en.lblNear);set("lblNearExit",t.lblNearExit||T.en.lblNearExit);
+set("lblFar",t.lblFar||T.en.lblFar);set("lblHide",t.lblHide||T.en.lblHide);
+set("lblRise",t.lblRise||T.en.lblRise);set("lblPanDps",t.lblPanDps||T.en.lblPanDps);
+set("lblPanMax",t.lblPanMax||T.en.lblPanMax);set("btnTune",t.saveTune||T.en.saveTune);
+set("btnDefaults",t.resetTune||T.en.resetTune);
+set("hWifi",t.hWifi);set("pWifiHint",t.wHint);set("lblSsid",t.net);
+set("btnScan",t.scan);set("lblManual",t.manual);set("lblPass",t.pass);set("btnWifi",t.conn);
+set("hCloudCard",t.hCloudCard||T.en.hCloudCard);set("pCloudHint",t.cCloudHint||T.en.cCloudHint);
+set("lblBind",t.bind||"Pair code");set("lblCloud",t.cloud||"Cloud URL");set("btnCloud",t.connCloud||"Connect server");
+set("hCal",t.hCal);set("pCalHint",t.cHint);set("btnHome",t.home);set("btnFlip",t.flipPan);set("hStatus",t.hStatus);
+set("kFollow",t.kFollow);set("kPresent",t.kPresent);set("kHomeWifi",t.kHomeWifi);set("kTheme",t.kTheme);
+set("kCloud",t.kCloud||T.en.kCloud);
+["hPlace","pPlaceHint","lblCity","btnCity","kPlace","hTg","pTgHint","lblTg","btnTg","btnTgUnpair","kTg"].forEach(function(k){set(k,t[k]||T.en[k]);});set("kZone",t.kZone||T.en.kZone);
+document.documentElement.lang=el("langSel").value;
+applyTheme();
+}
+function pushPrefs(done){
+var langVal=el("langSel").value;
+var body="lang="+encodeURIComponent(langVal)+"&gender="+encodeURIComponent(gender)+"&flip="+(screenFlip?"1":"0");
+var x=new XMLHttpRequest();
+x.open("POST","/api/prefs",true);x.timeout=2500;
+x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+x.onload=function(){var ok=x.status>=200&&x.status<300;var tip=el("syncOk");if(tip)tip.textContent=ok?tr().synced:("prefs "+x.status);if(done)done(ok);};
+x.onerror=function(){if(done)done(false);};x.ontimeout=function(){if(done)done(false);};
+try{x.send(body);}catch(e){if(done)done(false);}
+}
+function showMain(){el("welcome").classList.add("hidden");el("main").classList.remove("hidden");applyI18n();scanWifi({force:true});startAutoScan();}
+function showWelcome(){el("main").classList.add("hidden");el("welcome").classList.remove("hidden");applyI18n();}
+function onPrefsChanged(){applyI18n();pushPrefs(null);}
+el("btnEnter").onclick=function(){applyI18n();lsSet("pet_setup","1");showMain();pushPrefs(null);};
+el("btnPrefs").onclick=function(){lsDel("pet_setup");showWelcome();};
+el("langSel").onchange=onPrefsChanged;
+el("optF").onclick=function(){gender="female";onPrefsChanged();};
+el("optM").onclick=function(){gender="male";onPrefsChanged();};
+el("optFlip0").onclick=function(){screenFlip=false;onPrefsChanged();};
+el("optFlip1").onclick=function(){screenFlip=true;onPrefsChanged();};
+
+function rssiBars(rssi){
+var n=0;
+if(rssi>=-55)n=4;else if(rssi>=-65)n=3;else if(rssi>=-75)n=2;else if(rssi>=-85)n=1;
+var h=[4,7,10,13],html='<span class="bars">';
+for(var i=0;i<4;i++)html+='<i class="'+(i<n?'on':'')+'" style="height:'+h[i]+'px"></i>';
+return html+'</span>';
+}
+function setBanner(kind,text){
+var b=el("wifiBanner");
+if(!b)return;
+b.className=kind?("show "+kind):"";
+b.textContent=text||"";
+}
+function setCloudBanner(kind,text){
+var b=el("cloudBanner");
+if(!b)return;
+b.className=kind?("show "+kind):"";
+b.textContent=text||"";
+}
+function drawRadar(j){
+var c=el("radarFan");if(!c||!c.getContext)return;
+var ctx=c.getContext("2d");
+var W=c.width,H=c.height;
+ctx.clearRect(0,0,W,H);
+ctx.fillStyle="#1a1f2a";ctx.fillRect(0,0,W,H);
+/* Apex at top = module; fan opens downward = looking at people. */
+var cx=W/2,cy=18,R=H-40;
+var maxDeg=80,maxR=6.0;
+var t=tr();
+var a0=(90-maxDeg)*Math.PI/180,a1=(90+maxDeg)*Math.PI/180;
+ctx.beginPath();
+ctx.moveTo(cx,cy);
+ctx.arc(cx,cy,R,a0,a1);
+ctx.closePath();
+ctx.fillStyle="rgba(90,160,255,0.12)";ctx.fill();
+ctx.strokeStyle="rgba(160,200,255,0.45)";ctx.lineWidth=1;ctx.stroke();
+ctx.fillStyle="rgba(200,220,255,0.75)";ctx.font="10px system-ui,sans-serif";
+for(var ring=1;ring<=4;ring++){
+var rr=R*ring/4;
+ctx.beginPath();
+ctx.arc(cx,cy,rr,a0,a1);
+ctx.strokeStyle="rgba(160,200,255,0.22)";ctx.stroke();
+var label=(maxR*ring/4).toFixed(ring===4?0:1)+"m";
+ctx.fillText(label,cx+6,cy+rr-2);
+}
+ctx.strokeStyle="rgba(255,255,255,0.35)";
+ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx,cy+R);ctx.stroke();
+var panSign=(j&&typeof j.pan_sign==="number")?j.pan_sign:1;
+var pan=(j&&typeof j.pan_deg==="number")?j.pan_deg:0;
+/* Flip L/R for module-looking-at-people view (screen left = person's left). */
+pan=-pan;
+var blips=(j&&j.radar&&j.radar.blips)||[];
+function toXY(azMapped,dist){
+var a=(90+azMapped)*Math.PI/180;
+var rr=Math.min(1,Math.max(0,dist/maxR))*R;
+return[cx+Math.cos(a)*rr,cy+Math.sin(a)*rr];
+}
+var nearestIdx=0,nearestR=1e9;
+for(var i=0;i<blips.length;i++){
+var rr=blips[i].r||0;
+if(rr<nearestR){nearestR=rr;nearestIdx=i;}
+}
+for(var i=0;i<blips.length;i++){
+var az=-(panSign*(blips[i].az||0));
+if(az>maxDeg)az=maxDeg;if(az<-maxDeg)az=-maxDeg;
+var p=toXY(az,blips[i].r||0);
+ctx.beginPath();ctx.arc(p[0],p[1],i===nearestIdx?7:4,0,Math.PI*2);
+ctx.fillStyle=i===nearestIdx?"#7CFFB2":"#6B8CFF";ctx.fill();
+if(i===nearestIdx){ctx.strokeStyle="#E8FFF2";ctx.lineWidth=2;ctx.stroke();}
+}
+if((!blips.length)&&j&&j.radar&&j.radar.az_ok&&j.radar.dist_m>0){
+var az0=-(panSign*(j.radar.az||0));
+if(az0>maxDeg)az0=maxDeg;if(az0<-maxDeg)az0=-maxDeg;
+var p0=toXY(az0,j.radar.dist_m);
+ctx.beginPath();ctx.arc(p0[0],p0[1],7,0,Math.PI*2);
+ctx.fillStyle="#7CFFB2";ctx.fill();
+}
+if(pan>maxDeg)pan=maxDeg;if(pan<-maxDeg)pan=-maxDeg;
+var tip=toXY(pan,maxR*0.92);
+ctx.strokeStyle="#FF9F43";ctx.lineWidth=3;
+ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(tip[0],tip[1]);ctx.stroke();
+ctx.fillStyle="#FF9F43";
+ctx.beginPath();
+var ang=(90+pan)*Math.PI/180;
+ctx.moveTo(tip[0],tip[1]);
+ctx.lineTo(tip[0]-Math.cos(ang-0.4)*12,tip[1]-Math.sin(ang-0.4)*12);
+ctx.lineTo(tip[0]-Math.cos(ang+0.4)*12,tip[1]-Math.sin(ang+0.4)*12);
+ctx.closePath();ctx.fill();
+ctx.fillStyle="#c9d4e6";ctx.font="12px system-ui,sans-serif";
+var panShow=(j&&typeof j.pan_deg==="number")?j.pan_deg:0;
+ctx.fillText("pan "+panShow.toFixed(0)+"°",8,H-8);
+var hint=el("radarHint");
+if(hint){
+var n=blips.length||((j&&j.radar&&j.radar.count)||0);
+hint.textContent=n>0?t.radarLive:t.radarEmpty;
+}
+var rule=el("radarRule");
+if(rule)rule.textContent=t.radarRule||"";
+}
+function paintStatus(j){
+var t=tr();
+if(j&&!prefsHydrated){
+if(j.lang){el("langSel").value=j.lang;}
+if(j.theme==="male"){gender="male";}else if(j.theme==="female"){gender="female";}
+screenFlip=!!j.screen_flip;
+prefsHydrated=true;
+applyI18n();
+}
+var follow=!!(j&&j.follow);
+var fb=el("fbadge");
+if(fb){fb.textContent=follow?t.fOn:t.fOff;fb.className="badge "+(follow?"on":"off");}
+el("vFollow").innerHTML='<span class="badge '+(follow?"on":"off")+'">'+(follow?t.fOn:t.fOff)+'</span>';
+var present=!!(j&&j.present);
+if(el("vPresent"))el("vPresent").textContent=present?t.presentYes:t.presentNo;
+var zone=(j&&j.zone)||"void";
+var zlab=zone==="near"?(t.zoneNear||T.en.zoneNear):(zone==="far"?(t.zoneFar||T.en.zoneFar):(t.zoneVoid||T.en.zoneVoid));
+if(el("vZone"))el("vZone").textContent=zlab;
+var live=el("pTuneLive");
+if(live){
+var d=(j&&j.radar&&typeof j.radar.dist_m==="number")?j.radar.dist_m:null;
+var uart=!!(j&&j.radar&&j.radar.uart);
+live.textContent=zlab+(uart&&d!=null?(" · "+d.toFixed(2)+" m"):"");
+}
+if(j&&j.tune&&!tuneHydrated){
+function setNum(id,v){var e=el(id);if(e&&typeof v==="number"&&isFinite(v))e.value=v;}
+setNum("nearM",j.tune.near_m);setNum("nearExitM",j.tune.near_exit_m);setNum("farM",j.tune.far_m);
+setNum("hideS",j.tune.hide_s);setNum("riseMs",j.tune.rise_ms);setNum("panDps",j.tune.pan_dps);setNum("panMax",j.tune.pan_max);
+tuneHydrated=true;
+}
+drawRadar(j||{});
+var sta=(j&&j.wifi&&j.wifi.sta)||"down";
+var ssid=(j&&j.wifi&&j.wifi.ssid)||"";
+var ip=(j&&j.wifi&&j.wifi.ip)||"";
+var rssi=(j&&j.wifi&&typeof j.wifi.rssi==="number")?j.wifi.rssi:-127;
+var reason=(j&&j.wifi&&j.wifi.reason)||0;
+var retry=(j&&j.wifi&&j.wifi.retry)||0;
+if(sta==="ok"){
+el("vHomeWifi").innerHTML='<span class="badge ok">'+t.connOk+'</span> '+(ssid||"")+(ip?(" · "+ip):"")+rssiBars(rssi);
+setBanner("ok",t.connOk+(ssid?(" · "+ssid):"")+(ip?(" · "+ip):""));
+wifiBusy=false;if(el("btnWifi"))el("btnWifi").disabled=false;
+}else if(sta==="connecting"){
+el("vHomeWifi").innerHTML='<span class="badge wait">'+t.wifiWait+'</span> '+(ssid||"")+(retry?(" · #"+retry):"");
+setBanner("wait",t.connecting+(ssid?(" · "+ssid):"")+(retry?(" · retry "+retry):""));
+}else if(sta==="fail"){
+el("vHomeWifi").innerHTML='<span class="badge bad">'+t.connFail+'</span>';
+setBanner("bad",t.connFail+(reason?(" (code "+reason+")"):""));
+wifiBusy=false;if(el("btnWifi"))el("btnWifi").disabled=false;
+}else{
+el("vHomeWifi").innerHTML='<span class="badge off">'+t.wifiDown+'</span>';
+if(!(lastSta==="connecting"||lastSta==="ok")&&el("wifiBanner")&&!el("wifiBanner").className){setBanner("","");}
+}
+lastSta=sta;
+if(window.paintExtra)window.paintExtra(j,sta);
+var th=(j&&j.theme)==="male"?t.blue:t.pink;
+el("vTheme").textContent=th;
+var cloud=j&&j.cloud;
+if(cloud&&!cloudHydrated){
+if(el("bindCode")&&cloud.bind)el("bindCode").value=cloud.bind;
+if(el("claimBase")&&cloud.claim_base)el("claimBase").value=cloud.claim_base;
+cloudHydrated=true;
+}
+if(el("vCloud")){
+var ms=cloud&&cloud.mqtt?cloud.mqtt:"idle";
+var badge="off";
+if(ms==="up")badge="ok";
+else if(ms==="claim"||ms==="mqtt"||ms==="sntp"||ms==="wait_ip")badge="wait";
+else if(ms==="err")badge="bad";
+var extra="";
+if(cloud&&cloud.claimed&&cloud.device_id)extra=" · "+cloud.device_id;
+if(cloud&&cloud.err)extra+=" · "+cloud.err;
+el("vCloud").innerHTML='<span class="badge '+badge+'">'+ms+"</span>"+extra;
+var step=t.cloudStart;
+if(ms==="wait_ip")step=(sta!=="ok")?(t.cloudNeedWifi||t.cloudWaitIp):t.cloudWaitIp;
+else if(ms==="sntp")step=t.cloudSntp||step;
+else if(ms==="claim")step=t.cloudClaim||step;
+else if(ms==="mqtt")step=t.cloudMqtt||step;
+else if(ms==="err")step=(t.cloudFail||t.connFail)+(cloud&&cloud.err?(" · "+cloud.err):"");
+else if(ms==="up")step=t.cloudOk||t.connOk;
+else if(ms==="idle")step="";
+if(ms==="up"){cloudBusy=false;if(el("btnCloud"))el("btnCloud").disabled=false;setCloudBanner("ok",step);}
+else if(ms==="err"){cloudBusy=false;if(el("btnCloud"))el("btnCloud").disabled=false;setCloudBanner("bad",step);}
+else if(ms==="wait_ip"&&sta!=="ok"){cloudBusy=false;if(el("btnCloud"))el("btnCloud").disabled=false;setCloudBanner("wait",step);}
+else if(step){setCloudBanner("wait",step+(cloud&&cloud.err?(" · "+cloud.err):""));}
+}
+}
+function refresh(){
+var x=new XMLHttpRequest();
+x.open("GET","/api/status",true);x.timeout=3000;
+x.onload=function(){
+try{paintStatus(JSON.parse(x.responseText||"{}"));}catch(e){}
+};
+try{x.send();}catch(e){}
+}
+function j(u){var x=new XMLHttpRequest();x.open("GET",u,true);x.timeout=3000;x.onload=refresh;try{x.send();}catch(e){}}
+function setFollow(v){var x=new XMLHttpRequest();x.open("GET","/api/follow?on="+v,true);x.timeout=3000;x.onload=refresh;try{x.send();}catch(e){}}
+el("btnOn").onclick=function(){setFollow(1);};
+el("btnOff").onclick=function(){setFollow(0);};
+el("btnTune").onclick=function(){
+var t=tr();
+var banner=el("tuneBanner");
+function show(cls,msg){if(!banner)return;banner.className="show "+cls;banner.textContent=msg;}
+var body="near_m="+encodeURIComponent(el("nearM").value)
++"&near_exit_m="+encodeURIComponent(el("nearExitM").value)
++"&far_m="+encodeURIComponent(el("farM").value)
++"&hide_s="+encodeURIComponent(el("hideS").value)
++"&rise_ms="+encodeURIComponent(el("riseMs").value)
++"&pan_dps="+encodeURIComponent(el("panDps").value)
++"&pan_max="+encodeURIComponent(el("panMax").value);
+var x=new XMLHttpRequest();
+x.open("POST","/api/tune",true);x.timeout=4000;
+x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+x.onload=function(){
+var ok=x.status>=200&&x.status<300;
+show(ok?"ok":"bad",ok?(t.tuneOk||T.en.tuneOk):(t.tuneFail||T.en.tuneFail));
+tuneHydrated=false;refresh();
+};
+x.onerror=x.ontimeout=function(){show("bad",t.tuneFail||T.en.tuneFail);};
+try{x.send(body);}catch(e){show("bad",t.tuneFail||T.en.tuneFail);}
+};
+el("btnDefaults").onclick=function(){
+var t=tr();
+var banner=el("tuneBanner");
+function show(cls,msg){if(!banner)return;banner.className="show "+cls;banner.textContent=msg;}
+var x=new XMLHttpRequest();
+x.open("POST","/api/defaults",true);x.timeout=4000;
+x.onload=function(){
+var ok=x.status>=200&&x.status<300;
+show(ok?"ok":"bad",ok?(t.resetOk||T.en.resetOk):(t.resetFail||T.en.resetFail));
+tuneHydrated=false;refresh();
+};
+x.onerror=x.ontimeout=function(){show("bad",t.resetFail||T.en.resetFail);};
+try{x.send();}catch(e){show("bad",t.resetFail||T.en.resetFail);}
+};
+document.querySelectorAll("[data-j]").forEach(function(b){b.onclick=function(){j(b.getAttribute("data-j"));};});
+function currentSsid(){
+return ((el("ssidManual")&&el("ssidManual").value||"").trim()||(el("ssidList")&&el("ssidList").value||"")).trim();
+}
+function fillSsidList(nets,keep){
+var list=el("ssidList");if(!list)return;
+var sel=keep||list.value||"";
+list.innerHTML="";
+if(!nets||!nets.length){list.innerHTML='<option value="">—</option>';return;}
+nets.forEach(function(n){
+var o=document.createElement("option");
+o.value=n.ssid;
+o.textContent=n.ssid+"  ("+n.rssi+" dBm)";
+list.appendChild(o);
+});
+if(sel){
+var found=false;
+for(var i=0;i<list.options.length;i++){
+if(list.options[i].value===sel){list.selectedIndex=i;found=true;break;}
+}
+if(!found){
+var o=document.createElement("option");
+o.value=sel;o.textContent=sel;
+list.insertBefore(o,list.firstChild);
+list.value=sel;
+}
+}
+}
+function ssidListBusy(){
+var list=el("ssidList");
+var pass=el("wifiPass");
+return (list&&document.activeElement===list)||(pass&&document.activeElement===pass);
+}
+function scanWifi(opts){
+var silent=opts&&opts.silent;
+var force=opts&&opts.force;
+if(!force&&(scanning||wifiBusy))return;
+if(silent&&(ssidListBusy()||lastSta==="connecting"))return;
+if(force)scanning=false;
+scanning=true;
+var t=tr();var list=el("ssidList");
+var keep=currentSsid();
+if(!silent&&list)list.innerHTML='<option value="">'+t.scanning+"</option>";
+var x=new XMLHttpRequest();
+x.open("GET",force?"/api/wifi/scan?force=1":"/api/wifi/scan",true);x.timeout=15000;
+x.onload=function(){
+scanning=false;
+try{
+var j=JSON.parse(x.responseText||"{}");
+fillSsidList(j.networks,keep);
+}catch(e){if(!silent&&list)list.innerHTML='<option value="">'+t.scanFail+"</option>";}
+};
+x.onerror=x.ontimeout=function(){scanning=false;if(!silent&&list)list.innerHTML='<option value="">'+t.scanFail+"</option>";};
+try{x.send();}catch(e){scanning=false;if(!silent&&list)list.innerHTML='<option value="">'+t.scanFail+"</option>";}
+}
+function startAutoScan(){
+if(scanTimer)return;
+scanTimer=setInterval(function(){scanWifi({silent:true});},8000);
+}
+el("btnScan").onclick=function(){scanWifi({force:true});};
+el("btnWifi").onclick=function(){
+var t=tr();
+var ssid=currentSsid();
+if(!ssid){setBanner("bad",t.needSsid);return;}
+wifiBusy=true;
+setBanner("wait",t.connStart);el("btnWifi").disabled=true;
+var body="ssid="+encodeURIComponent(ssid)+"&pass="+encodeURIComponent(el("wifiPass").value);
+var x=new XMLHttpRequest();
+x.open("POST","/api/wifi/connect",true);x.timeout=20000;
+x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+x.onload=function(){
+if(x.status<200||x.status>=300){setBanner("bad",t.connFail);wifiBusy=false;el("btnWifi").disabled=false;}
+else{setBanner("wait",t.connecting+" · "+ssid);lastSta="connecting";}
+refresh();
+};
+x.onerror=x.ontimeout=function(){setBanner("bad",t.connFail);wifiBusy=false;el("btnWifi").disabled=false;};
+try{x.send(body);}catch(e){setBanner("bad",t.connFail);wifiBusy=false;el("btnWifi").disabled=false;}
+};
+el("btnCloud").onclick=function(){
+var t=tr();
+var bind=(el("bindCode")&&el("bindCode").value||"").trim();
+if(!bind){setCloudBanner("bad",t.needBind||"Enter a pair code");return;}
+var claim=(el("claimBase")&&el("claimBase").value||"").trim();
+if(!/^https?:\/\//.test(claim)){setCloudBanner("bad",t.needUrl||T.en.needUrl);return;}
+cloudBusy=true;
+setCloudBanner("wait",t.cloudStart||t.connStart);el("btnCloud").disabled=true;
+var body="bind="+encodeURIComponent(bind)+"&claim_base="+encodeURIComponent(claim);
+var x=new XMLHttpRequest();
+x.open("POST","/api/cloud/connect",true);x.timeout=20000;
+x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+x.onload=function(){
+if(x.status<200||x.status>=300){setCloudBanner("bad",(t.cloudFail||t.connFail)+" · "+(x.responseText||x.status));cloudBusy=false;el("btnCloud").disabled=false;}
+else{setCloudBanner("wait",t.cloudStart||t.connecting);}
+refresh();
+};
+x.onerror=x.ontimeout=function(){setCloudBanner("bad",t.cloudFail||t.connFail);cloudBusy=false;el("btnCloud").disabled=false;};
+try{x.send(body);}catch(e){setCloudBanner("bad",t.cloudFail||t.connFail);cloudBusy=false;el("btnCloud").disabled=false;}
+};
+function banner(id,cls,msg){var b=el(id);if(!b)return;b.className=msg?("banner show "+cls):"banner";b.textContent=msg||"";}
+function L(k){var t=tr();return t[k]||T.en[k]||"";}
+var placeHydrated=false,cityPending=false;
+window.paintExtra=function(j,sta){
+var p=j&&j.place;
+if(p){
+if(!placeHydrated&&el("cityIn")){el("cityIn").value=p.city||"";placeHydrated=true;}
+var v=p.ok?(p.name||p.city):(p.city?(p.city+" …"):"—");
+el("vPlace").textContent=v;
+if(cityPending){
+if(p.ok){banner("placeBanner","ok",L("cityOk")+" "+(p.name||p.city));cityPending=false;}
+else if(p.err==="city_not_found"){banner("placeBanner","bad",L("cityNotFound"));cityPending=false;}
+else if(sta!=="ok"){banner("placeBanner","wait",L("cityNeedWifi"));}
+}
+}
+var g=j&&j.telegram;
+if(g){
+var st=g.state,txt=L("tgOff"),cls="off";
+if(st==="paired"){txt=L("tgPaired")+(g.bot?(" · @"+g.bot):"");cls="ok";}
+else if(st==="wait_pair"){txt=L("tgWaitPair")+(g.bot?(" t.me/"+g.bot):"");cls="wait";}
+else if(st==="wait_wifi"){txt=L("tgWaitWifi");cls="wait";}
+else if(st==="bad_token"){txt=L("tgBad");cls="bad";}
+else if(st==="err"){txt=L("tgErr");cls="bad";}
+el("vTg").innerHTML='<span class="badge '+cls+'">'+(st||"off")+"</span> ";
+el("vTg").appendChild(document.createTextNode(txt));
+if(g.token_set||st!=="off"){banner("tgBanner",cls==="off"?"wait":cls,txt);}
+if(el("btnTgUnpair"))el("btnTgUnpair").disabled=!g.paired;
+}
+};
+function post(url,body,cb){var x=new XMLHttpRequest();x.open("POST",url,true);x.timeout=6000;
+x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+x.onload=function(){cb(x.status>=200&&x.status<300,x.responseText);refresh();};
+x.onerror=x.ontimeout=function(){cb(false,"");};try{x.send(body);}catch(e){cb(false,"");}}
+el("btnCity").onclick=function(){
+var c=(el("cityIn").value||"").trim();
+var off=-new Date().getTimezoneOffset();
+cityPending=true;banner("placeBanner","wait",L("cityStart"));
+post("/api/place","city="+encodeURIComponent(c)+"&utc_off="+off,function(ok,txt){if(!ok){cityPending=false;banner("placeBanner","bad",txt||"error");}});
+};
+el("btnTg").onclick=function(){
+var tok=(el("tgToken").value||"").trim();
+post("/api/telegram","token="+encodeURIComponent(tok),function(ok,txt){banner("tgBanner",ok?"wait":"bad",ok?L("tgWaitWifi"):(txt||"error"));if(ok)el("tgToken").value="";});
+};
+el("btnTgUnpair").onclick=function(){post("/api/telegram","unpair=1",function(){});};
+applyI18n();
+if(lsGet("pet_setup")==="1"){showMain();}else{showWelcome();}
+refresh();
+setInterval(refresh,700);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# ESP-IDF build output and local config
+firmware/build/
+firmware/managed_components/
+firmware/sdkconfig
+firmware/sdkconfig.old
+*.bin
+*.elf
+*.map
+
+# Fonts are downloaded locally to regenerate the UI glyphs (see firmware/tools/README.md)
+firmware/tools/fonts/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

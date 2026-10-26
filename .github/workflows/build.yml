@@ -1,0 +1,41 @@
+name: Build firmware
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with ESP-IDF
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v6.0.2
+          target: esp32s3
+          path: firmware
+          command: idf.py build && cd build && python -m esptool --chip esp32s3 merge-bin -o radar-desk-buddy-merged.bin @flash_args
+
+      - name: Radar protocol host test
+        run: |
+          cd firmware/components/radar_link/test
+          gcc -std=c11 -Wall -Wextra -Werror -I../include ../radar_protocol.c test_radar_protocol.c -lm -o radar_protocol_test
+          ./radar_protocol_test
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: radar-desk-buddy-firmware
+          path: |
+            firmware/build/radar_desk_buddy.bin
+            firmware/build/bootloader/bootloader.bin
+            firmware/build/partition_table/partition-table.bin
+            firmware/build/ota_data_initial.bin
+            firmware/build/flash_args
+            firmware/build/radar-desk-buddy-merged.bin
