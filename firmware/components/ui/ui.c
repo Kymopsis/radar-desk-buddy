@@ -949,6 +949,8 @@ static bool wrap_msg_scale(const char *s, int scale, int line_h, int y0, int max
         }
         int bytes = 0;
         int w = 0;
+        int space_bytes = -1; /* last break point inside this line (Latin word wrap) */
+        const char *space_q = NULL;
         const char *q = p;
         while (*q) {
             uint32_t cp;
@@ -969,7 +971,19 @@ static bool wrap_msg_scale(const char *s, int scale, int line_h, int y0, int max
                 if (bytes == 0) {
                     return false;
                 }
+                /* Break after the last space so English words stay whole. */
+                if (cp != ' ' && space_bytes > 0) {
+                    bytes = space_bytes;
+                    q = space_q;
+                }
+                while (*q == ' ') {
+                    q++;
+                }
                 break;
+            }
+            if (cp == ' ') {
+                space_bytes = bytes;
+                space_q = nxt;
             }
             memcpy(lines[n] + bytes, q, (size_t)add);
             bytes += add;
