@@ -10,7 +10,7 @@ connectors. Wi-Fi setup happens in your phone's browser, served by the ESP32
 itself.
 
 > Status: firmware compiles with ESP-IDF v6.0.2 and runs on the prototype.
-> The 3D-printed enclosure (v3.2, all parts as STL and STEP) is in [`enclosure/`](enclosure/).
+> The 3D-printed enclosure (v3.2: 8 printable STL parts, STEP for the 5 main parts) is in [`enclosure/`](enclosure/).
 
 ## Highlights
 
@@ -86,7 +86,7 @@ band (near / far / nobody). See [docs/how-it-works.md](docs/how-it-works.md).
 ```
 firmware/    ESP-IDF project (C)
 docs/        Wiring, flashing, level guides, FAQ
-enclosure/   3D-printable case and mechanism (STL + STEP)
+enclosure/   3D-printable case and mechanism (STL, plus STEP for the main parts)
 ```
 
 ## Help and questions

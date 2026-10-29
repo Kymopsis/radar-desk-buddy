@@ -5,8 +5,10 @@ mechanism. All parts are in this folder; there is nothing else to download.
 
 ![All v3.2 parts](preview.png)
 
-Assembled footprint: about **124 × 180 mm**, shell height about **75 mm**
-(without the figure).
+Assembled footprint: about **124 × 180 mm**. Height about **91 mm** to the tips
+of the ears (about 75 mm to the flat top of the shell), without the figure.
+
+8 printable STL parts; STEP (for editing) is included for the 5 main parts.
 
 ## Parts
 
