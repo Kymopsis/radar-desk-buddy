@@ -1,29 +1,27 @@
 # Enclosure (v3.2)
 
 Everything you need to print one Radar Desk Buddy case and its lift/pan
-mechanism. All parts are in this folder; there is nothing else to download.
+mechanism: the 8 STL files in this folder. Print one of each and assemble.
 
 ![All v3.2 parts](preview.png)
 
 Assembled footprint: about **124 × 180 mm**. Height about **91 mm** to the tips
 of the ears (about 75 mm to the flat top of the shell), without the figure.
 
-8 printable STL parts; STEP (for editing) is included for the 5 main parts.
-
 ## Parts
 
-Print one of each.
+Print one of each, all 8 files.
 
-| Part | STL (print) | STEP (edit) | Size (mm) | What it does |
-|---|---|---|---|---|
-| Top shell | [top-shell.stl](stl/top-shell.stl) | [top-shell.step](step/top-shell.step) | 124 × 180 × 91 | Main case with ears |
-| Base plate | [base-plate.stl](stl/base-plate.stl) | [base-plate.step](step/base-plate.step) | 124 × 180 × 2.6 | Bottom cover |
-| Lift base | [lift-base.stl](stl/lift-base.stl) | [lift-base.step](step/lift-base.step) | 97 × 86 × 76 | Mechanism base with guide posts |
-| Disc bracket | [disc-bracket.stl](stl/disc-bracket.stl) | [disc-bracket.step](step/disc-bracket.step) | 63 × 46 × 63 | Bracket under the turntable |
-| Toy bracket | [toy-bracket.stl](stl/toy-bracket.stl) | [toy-bracket.step](step/toy-bracket.step) | 40 × 40 × 40 | Turntable the figure stands on |
-| Lift crank | [lift-crank.stl](stl/lift-crank.stl) | – | 14 × 37 × 17 | Crank on the lift servo horn |
-| Lift link | [lift-link.stl](stl/lift-link.stl) | – | 4 × 9 × 48 | Link between crank and lift |
-| Drive link | [drive-link.stl](stl/drive-link.stl) | – | 34 × 17 × 43 | Turntable drive link |
+| Part | File | Size (mm) | What it does |
+|---|---|---|---|
+| Top shell | [top-shell.stl](top-shell.stl) | 124 × 180 × 91 | Main case with ears |
+| Base plate | [base-plate.stl](base-plate.stl) | 124 × 180 × 2.6 | Bottom cover |
+| Lift base | [lift-base.stl](lift-base.stl) | 97 × 86 × 76 | Mechanism base with guide posts |
+| Disc bracket | [disc-bracket.stl](disc-bracket.stl) | 63 × 46 × 63 | Bracket under the turntable |
+| Toy bracket | [toy-bracket.stl](toy-bracket.stl) | 40 × 40 × 40 | Turntable the figure stands on |
+| Lift crank | [lift-crank.stl](lift-crank.stl) | 14 × 37 × 17 | Crank on the lift servo horn |
+| Lift link | [lift-link.stl](lift-link.stl) | 4 × 9 × 48 | Link between crank and lift |
+| Drive link | [drive-link.stl](drive-link.stl) | 34 × 17 × 43 | Turntable drive link |
 
 STL files are in millimetres. Some parts are exported in their assembly
 orientation: rotate them in your slicer so the largest flat face sits on the
