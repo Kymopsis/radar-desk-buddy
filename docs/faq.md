@@ -8,9 +8,10 @@ no microphone.
 Yes, through plastic, wood or fabric. Metal and foil block the radar.
 
 **Which radar kit do I need?**
-The Kymopsis 60 GHz AiP radar development kit with the **Presence, wall mount**
-firmware. It reports target positions over UART, which the ESP32 turns into an
-angle and a distance. See the parts list in the [README](../README.md).
+Either Kymopsis 60 GHz board, ordered with the **Presence, wall mount**
+application: the AiP sensor (42 × 8 mm) or the PCB-antenna DIY board
+(25 × 31.5 mm). Both report target positions over UART, which the ESP32 turns
+into an angle and a distance. See the parts list in the [README](../README.md).
 
 **Can I use a different ESP32?**
 The firmware targets ESP32-S3 with 8 MB octal PSRAM (N16R8). Other S3 boards

@@ -52,6 +52,20 @@ Do not use GPIO 35, 36, 37 on N16R8 boards: they belong to the octal PSRAM.
 Check the pin labels printed on your radar kit. If your kit has two 3V3 pins
 and two GND pins, connect both of each.
 
+Radar pad numbers for the two Kymopsis 60 GHz boards:
+
+| Signal | AiP sensor pin | PCB-antenna board pin |
+|---|---|---|
+| 3.3V | 1 and 7 | 13 |
+| GND | 6 and 10 | 14 (and 9) |
+| RX0 (from ESP32 GPIO 17) | 3 | 16 |
+| TX0 (to ESP32 GPIO 18) | 4 | 17 |
+| RST (optional, ESP32 GPIO 4) | 5 | 7 |
+| TX2 (optional, ESP32 GPIO 16) | 2 | 6 |
+
+The AiP sensor's lead ends in female Dupont plugs. The PCB-antenna board has
+2.0 mm pin headers; use the 2.0 mm to 2.54 mm jumper wires that come with it.
+
 ## Mounting
 
 - The radar looks forward from its antenna side. Plastic in front of it is fine;
