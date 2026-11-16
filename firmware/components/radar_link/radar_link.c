@@ -21,7 +21,7 @@ static const char *TAG = "radar_link";
 #define GPIO_ENTER_MS  300
 #define GPIO_LEAVE_MS  2500
 
-/* HLK stock UART is typically 115200; Andar demo boards often use 1382400. */
+/* Stock module firmware is typically 115200 baud; some development firmware uses 1382400. */
 static const int s_baud_table[] = {115200, 1382400, 921600, 460800};
 #define BAUD_COUNT (sizeof(s_baud_table) / sizeof(s_baud_table[0]))
 
@@ -49,8 +49,8 @@ static radar_fw_mode_t map_mode(radar_wire_mode_t mode)
         return RADAR_FW_2D;
     case RADAR_WIRE_3D:
         return RADAR_FW_3D;
-    case RADAR_WIRE_HLK:
-        return RADAR_FW_HLK;
+    case RADAR_WIRE_STOCK:
+        return RADAR_FW_STOCK;
     default:
         return RADAR_FW_UNKNOWN;
     }

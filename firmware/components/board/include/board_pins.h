@@ -32,7 +32,7 @@
 
 /* Radar UART (step 60G+) */
 #define BOARD_PIN_RADAR_RST  GPIO_NUM_4
-/* LD6004 pin2 OUT/TX2: stock FW = presence level (high=someone in zone).
+/* Radar module pin2 OUT/TX2: stock FW = presence level (high=someone in zone).
  * Used as lift gate; do NOT also use as UART RX. */
 #define BOARD_PIN_RADAR_TX2       GPIO_NUM_16
 #define BOARD_PIN_RADAR_PRESENCE  BOARD_PIN_RADAR_TX2
