@@ -8,7 +8,7 @@
 #endif
 
 #define RADAR_ITEM_2D  16u
-#define RADAR_ITEM_HLK 20u
+#define RADAR_ITEM_STOCK 20u
 #define RADAR_ITEM_3D  24u
 
 static uint16_t item_stride(radar_wire_mode_t mode)
@@ -16,8 +16,8 @@ static uint16_t item_stride(radar_wire_mode_t mode)
     switch (mode) {
     case RADAR_WIRE_2D:
         return RADAR_ITEM_2D;
-    case RADAR_WIRE_HLK:
-        return RADAR_ITEM_HLK;
+    case RADAR_WIRE_STOCK:
+        return RADAR_ITEM_STOCK;
     case RADAR_WIRE_3D:
         return RADAR_ITEM_3D;
     default:
@@ -80,8 +80,8 @@ static radar_wire_mode_t detect_mode(const uint8_t *payload, uint16_t length,
         if (count * RADAR_ITEM_2D == body) {
             return RADAR_WIRE_2D;
         }
-        if (count * RADAR_ITEM_HLK == body) {
-            return RADAR_WIRE_HLK;
+        if (count * RADAR_ITEM_STOCK == body) {
+            return RADAR_WIRE_STOCK;
         }
         if (count * RADAR_ITEM_3D == body) {
             return RADAR_WIRE_3D;
@@ -100,7 +100,7 @@ static int32_t read_track_id(const uint8_t *item, radar_wire_mode_t mode)
     if (mode == RADAR_WIRE_3D) {
         return read_i32_le(item + 12);
     }
-    if (mode == RADAR_WIRE_HLK) {
+    if (mode == RADAR_WIRE_STOCK) {
         return read_i32_le(item + 16);
     }
     return read_i32_le(item + 12); /* 2D */
@@ -110,7 +110,7 @@ static void fill_sample_from_item(radar_wire_sample_t *sample, const uint8_t *it
                                   radar_wire_mode_t mode, float x, float y, float z,
                                   float distance, int32_t track_id)
 {
-    const bool has_z = mode == RADAR_WIRE_3D || mode == RADAR_WIRE_HLK;
+    const bool has_z = mode == RADAR_WIRE_3D || mode == RADAR_WIRE_STOCK;
     sample->present = true;
     sample->x_m = x;
     sample->y_m = y;
@@ -124,7 +124,7 @@ static void fill_sample_from_item(radar_wire_sample_t *sample, const uint8_t *it
     if (mode == RADAR_WIRE_3D) {
         sample->speed_mps_valid = true;
         sample->radial_speed_mps = read_f32_le(item + 20);
-    } else if (mode == RADAR_WIRE_HLK) {
+    } else if (mode == RADAR_WIRE_STOCK) {
         sample->doppler_raw = read_i32_le(item + 12);
     } else {
         sample->doppler_raw = read_i32_le(item + 8);
@@ -154,7 +154,7 @@ static bool parse_target(radar_tf_decoder_t *decoder, const uint8_t *payload, ui
         return true;
     }
 
-    const bool has_z = mode == RADAR_WIRE_3D || mode == RADAR_WIRE_HLK;
+    const bool has_z = mode == RADAR_WIRE_3D || mode == RADAR_WIRE_STOCK;
     int chosen = -1;
     float best_dist = INFINITY;
 

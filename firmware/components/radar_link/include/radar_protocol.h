@@ -18,9 +18,9 @@
 
 typedef enum {
     RADAR_WIRE_UNKNOWN = 0,
-    RADAR_WIRE_2D,      /* Andar 2D: x,y,dop,id — 16 B/item */
-    RADAR_WIRE_3D,      /* Andar 3D: x,y,z,id,power,speed — 24 B/item */
-    RADAR_WIRE_HLK,     /* HLK stock: x,y,z,dop_idx,cluster_id — 20 B/item */
+    RADAR_WIRE_2D,      /* 2D firmware: x,y,dop,id — 16 B/item */
+    RADAR_WIRE_3D,      /* 3D firmware: x,y,z,id,power,speed — 24 B/item */
+    RADAR_WIRE_STOCK,     /* stock module firmware: x,y,z,dop_idx,cluster_id — 20 B/item */
 } radar_wire_mode_t;
 
 typedef struct {
@@ -51,7 +51,7 @@ typedef struct {
     float elevation_deg;
     float distance_m;
     float radial_speed_mps;     /* valid only when speed_mps_valid */
-    int32_t doppler_raw;        /* 2D / HLK Doppler field */
+    int32_t doppler_raw;        /* 2D / stock-firmware Doppler field */
     int32_t track_id;           /* cluster/id; -1 if unknown */
     int target_count;
     int blip_count;
